@@ -2,7 +2,7 @@ _Pragma("once");
 #include <QObject>
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
-    #ifdef SONIXBEAUTYKITS
+    #ifdef QZeroAssistKit
         #define SONIXEX_API Q_DECL_EXPORT
     #else
         #define SONIXEX_API Q_DECL_IMPORT
