@@ -3,15 +3,15 @@ _Pragma("once");
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
     #ifdef QZeroAssistKit
-        #define SONIXEX_API Q_DECL_EXPORT
+        #define QZERO_API Q_DECL_EXPORT
     #else
-        #define SONIXEX_API Q_DECL_IMPORT
+        #define QZERO_API Q_DECL_IMPORT
     #endif
 #else
-    #define SONIXEX_API
+    #define QZERO_API
 #endif
 
-class SONIXEX_API ApplicationConfig : public QObject
+class QZERO_API ApplicationConfig : public QObject
 {
     Q_OBJECT
 public:

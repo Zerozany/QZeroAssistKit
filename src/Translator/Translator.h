@@ -5,18 +5,18 @@ _Pragma("once");
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
     #ifdef QZeroAssistKit
-        #define SONIXEX_API Q_DECL_EXPORT
+        #define QZERO_API Q_DECL_EXPORT
     #else
-        #define SONIXEX_API Q_DECL_IMPORT
+        #define QZERO_API Q_DECL_IMPORT
     #endif
 #else
-    #define SONIXEX_API
+    #define QZERO_API
 #endif
 
 class QJSEngine;
 class QQmlEngine;
 
-class SONIXEX_API Translator : public QObject
+class QZERO_API Translator : public QObject
 {
     Q_OBJECT
     QML_SINGLETON
