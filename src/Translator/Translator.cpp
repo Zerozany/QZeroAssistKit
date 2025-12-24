@@ -20,6 +20,7 @@ void Translator::onLanguageChanged()
     {
         qApp->installTranslator(&m_translator);
     }
+    // TODO1 QML引擎需调用retranslate()方法
 }
 
 Translator* Translator::create(QQmlEngine*, QJSEngine*)
