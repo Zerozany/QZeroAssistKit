@@ -2,6 +2,7 @@ _Pragma("once");
 #include <QObject>
 #include <QtQml/qqmlregistration.h>
 #include <QTranslator>
+#include <QQmlApplicationEngine>
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
     #ifdef QZeroAssistKit
@@ -26,7 +27,7 @@ public:
     ~Translator() noexcept = default;
 
 public:
-    static Translator* create(QQmlEngine*, QJSEngine*);
+    static Translator* create(QQmlEngine* _qmlEngine = nullptr, QJSEngine* _qJSEngine = nullptr);
 
     Q_INVOKABLE QString language() const;
     Q_INVOKABLE void    setLanguage(const QString& _language);
@@ -45,4 +46,7 @@ private Q_SLOTS:
 private:
     QTranslator m_translator{};
     QString     m_language{};
+
+public:
+    inline static QQmlApplicationEngine* m_qmlApplicationEngine{nullptr};
 };

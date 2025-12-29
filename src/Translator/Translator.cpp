@@ -21,12 +21,17 @@ void Translator::onLanguageChanged()
         qApp->installTranslator(&m_translator);
     }
     // TODO1 QML引擎需调用retranslate()方法
+    Translator::m_qmlApplicationEngine->retranslate();
 }
 
-Translator* Translator::create(QQmlEngine*, QJSEngine*)
+Translator* Translator::create(QQmlEngine* _qmlEngine, QJSEngine* _qJSEngine)
 {
-    static Translator* translator{new Translator{}};
-    return translator;
+    if (_qmlEngine)
+    {
+        Translator::m_qmlApplicationEngine = qobject_cast<QQmlApplicationEngine*>(_qmlEngine);
+    }
+    static Translator translator{};
+    return &translator;
 }
 
 QString Translator::language() const
