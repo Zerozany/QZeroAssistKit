@@ -46,7 +46,7 @@ auto ApplicationConfig::initAppStyle() noexcept -> void
 #if defined(Q_OS_ANDROID)
     QQuickStyle::setStyle("Material");
 #elif defined(Q_OS_WINDOWS)
-    QQuickStyle::setStyle("Basic");
+    QQuickStyle::setStyle("Material");
 #endif
 }
 
