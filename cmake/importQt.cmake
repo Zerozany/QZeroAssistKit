@@ -16,7 +16,7 @@ qt_standard_project_setup(
     REQUIRES 6.8
 )
 
-qt_add_library(${PROJECT_NAME} SHARED)
+qt_add_library(${PROJECT_NAME} STATIC)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
