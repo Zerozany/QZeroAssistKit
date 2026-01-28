@@ -1,8 +1,6 @@
 _Pragma("once");
 #include <QObject>
-#include <QtQml/qqmlregistration.h>
 #include <QTranslator>
-#include <QQmlApplicationEngine>
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
     #ifdef QZeroAssistKit
@@ -16,26 +14,23 @@ _Pragma("once");
     #define QZERO_API
 #endif
 
-class QJSEngine;
-class QQmlEngine;
+class QQmlApplicationEngine;
 
-class QZERO_API Translator : public QObject
+class QZERO_API Translator : public QTranslator
 {
     Q_OBJECT
-    QML_SINGLETON
-    QML_ELEMENT
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
 public:
     ~Translator() noexcept = default;
 
 public:
-    static Translator* create(QQmlEngine* _qmlEngine = nullptr, QJSEngine* _qJSEngine = nullptr);
+    static auto instance(QQmlApplicationEngine* _qmlApplicationEngine = nullptr) noexcept -> Translator*;
 
     Q_INVOKABLE QString language() const;
     Q_INVOKABLE void    setLanguage(const QString& _language);
 
 private:
-    explicit(true) Translator(QObject* _parent = nullptr);
+    explicit(true) Translator(QQmlApplicationEngine* _qmlApplicationEngine = nullptr, QTranslator* _parent = nullptr);
 
     auto connectSignal2Slot() noexcept -> void;
 
@@ -46,9 +41,6 @@ private Q_SLOTS:
     void onLanguageChanged();
 
 private:
-    QTranslator m_translator{};
-    QString     m_language{};
-
-public:
-    inline static QQmlApplicationEngine* m_qmlApplicationEngine{nullptr};
+    QString                m_language{};
+    QQmlApplicationEngine* m_qmlApplicationEngine{nullptr};
 };

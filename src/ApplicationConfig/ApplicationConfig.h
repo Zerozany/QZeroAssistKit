@@ -8,6 +8,8 @@ _Pragma("once");
     #else
         #define QZERO_API Q_DECL_IMPORT
     #endif
+#elif defined(__GNUC__) || defined(__clang__)
+    #define QZERO_API __attribute__((visibility("default")))
 #else
     #define QZERO_API
 #endif
@@ -19,7 +21,7 @@ public:
     ~ApplicationConfig() noexcept = default;
 
 public:
-    inline static auto instance() noexcept -> ApplicationConfig*;
+    static auto instance() noexcept -> ApplicationConfig*;
 
     auto init(const QString& _quickStyle = QString{}, const QVector<Qt::ApplicationAttribute>& _attributeVector = QVector<Qt::ApplicationAttribute>{}, const QVariantMap& _envVariantMap = QVariantMap{}) noexcept -> void;
 
