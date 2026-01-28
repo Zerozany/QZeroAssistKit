@@ -1,5 +1,6 @@
 _Pragma("once");
 #include <QObject>
+#include <QtQml/qqmlregistration.h>
 #include <QTranslator>
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
@@ -14,17 +15,21 @@ _Pragma("once");
     #define QZERO_API
 #endif
 
+class QJSEngine;
+class QQmlEngine;
 class QQmlApplicationEngine;
 
 class QZERO_API Translator : public QTranslator
 {
     Q_OBJECT
+    QML_SINGLETON
+    QML_ELEMENT
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
 public:
     ~Translator() noexcept = default;
 
 public:
-    static auto instance(QQmlApplicationEngine* _qmlApplicationEngine = nullptr) noexcept -> Translator*;
+    static Translator* create(QQmlEngine* _qmlEngine = nullptr, QJSEngine* _qJSEngine = nullptr);
 
     Q_INVOKABLE QString language() const;
     Q_INVOKABLE void    setLanguage(const QString& _language);

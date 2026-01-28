@@ -1,5 +1,7 @@
 #include "Translator.h"
 #include <QGuiApplication>
+#include <QJSEngine>
+#include <QQmlEngine>
 #include <QQmlApplicationEngine>
 
 Translator::Translator(QQmlApplicationEngine* _qmlApplicationEngine, QTranslator* _parent) : QTranslator{_parent}, m_qmlApplicationEngine{_qmlApplicationEngine}
@@ -22,13 +24,13 @@ void Translator::onLanguageChanged()
     // TODO1 QML引擎需调用retranslate()方法
     if (m_qmlApplicationEngine)
     {
-        this->m_qmlApplicationEngine->retranslate();
+        m_qmlApplicationEngine->retranslate();
     }
 }
 
-auto Translator::instance(QQmlApplicationEngine* _qmlApplicationEngine) noexcept -> Translator*
+Translator* Translator::create(QQmlEngine* _qmlEngine, QJSEngine* _qJSEngine)
 {
-    static Translator translator{_qmlApplicationEngine};
+    static Translator translator{qobject_cast<QQmlApplicationEngine*>(_qmlEngine)};
     return &translator;
 }
 
