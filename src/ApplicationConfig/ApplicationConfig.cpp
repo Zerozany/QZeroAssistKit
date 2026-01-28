@@ -2,60 +2,44 @@
 #include <QQuickStyle>
 #include <QGuiApplication>
 
-ApplicationConfig::ApplicationConfig(QObject* _parent) : QObject{_parent}
-{
-}
-
 auto ApplicationConfig::instance() noexcept -> ApplicationConfig*
 {
     static ApplicationConfig systemConfig{};
     return &systemConfig;
 }
 
-auto ApplicationConfig::init() noexcept -> void
+auto ApplicationConfig::init(const QString& _quickStyle, const QVector<Qt::ApplicationAttribute>& _attributeVector, const QVariantMap& _envVariantMap) noexcept -> void
 {
-    std::invoke(&ApplicationConfig::initAppEnv, this);
-    std::invoke(&ApplicationConfig::initAppStyle, this);
-    std::invoke(&ApplicationConfig::initAppAttribute, this);
+    std::invoke(&ApplicationConfig::initAppStyle, this, _quickStyle);
+    std::invoke(&ApplicationConfig::initAppAttribute, this, _attributeVector);
+    std::invoke(&ApplicationConfig::initAppEnv, this, _envVariantMap);
 }
 
-auto ApplicationConfig::setAppEnv(const char* _envName, const QByteArray& _value) noexcept -> void
+ApplicationConfig::ApplicationConfig(QObject* _parent) : QObject{_parent}
 {
-    qputenv(_envName, _value);
 }
 
-auto ApplicationConfig::setAppAttribute(const Qt::ApplicationAttribute _attribute, bool _switch) noexcept -> void
-{
-    QGuiApplication::setAttribute(_attribute, _switch);
-}
-
-auto ApplicationConfig::initAppEnv() noexcept -> void
+auto ApplicationConfig::initAppStyle(const QString& _quickStyle) noexcept -> void
 {
 #if defined(Q_OS_ANDROID)
-    qputenv("QT_ANDROID_BACKGROUND_ACTIONS_QUEUE_SIZE", "50");
-    qputenv("QT_OPENGL_DEBUG", "1");  // 启用 OpenGL 调试
+    QQuickStyle::setStyle(_quickStyle);
 #elif defined(Q_OS_WINDOWS)
-
-#endif
-    qputenv("QSG_RENDER_LOOP", "threaded");   // 使用独立的线程的渲染循环模式
-    qputenv("QSG_RENDER_CONTINUOUSLY", "0");  // 禁用连续渲染，优化性能
-}
-
-auto ApplicationConfig::initAppStyle() noexcept -> void
-{
-#if defined(Q_OS_ANDROID)
-    QQuickStyle::setStyle("Material");
-#elif defined(Q_OS_WINDOWS)
-    QQuickStyle::setStyle("Material");
+    QQuickStyle::setStyle(_quickStyle);
 #endif
 }
 
-auto ApplicationConfig::initAppAttribute() noexcept -> void
+auto ApplicationConfig::initAppAttribute(const QVector<Qt::ApplicationAttribute>& _attributeVector) noexcept -> void
 {
-#if defined(Q_OS_ANDROID)
-    QGuiApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
-    QGuiApplication::setAttribute(Qt::AA_CompressTabletEvents);
-#elif defined(Q_OS_WINDOWS)
+    for (const auto& _attribute : _attributeVector)
+    {
+        QGuiApplication::setAttribute(_attribute);
+    }
+}
 
-#endif
+auto ApplicationConfig::initAppEnv(const QVariantMap& _envVariantMap) noexcept -> void
+{
+    for (const auto& [_key, _value] : _envVariantMap.toStdMap())
+    {
+        qputenv(_key.toUtf8(), _value.toByteArray().constData());
+    }
 }

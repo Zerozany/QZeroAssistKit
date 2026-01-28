@@ -1,5 +1,6 @@
 _Pragma("once");
 #include <QObject>
+#include <QVariantMap>
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
     #ifdef QZeroAssistKit
@@ -18,20 +19,16 @@ public:
     ~ApplicationConfig() noexcept = default;
 
 public:
-    static auto instance() noexcept -> ApplicationConfig*;
+    inline static auto instance() noexcept -> ApplicationConfig*;
 
-    auto init() noexcept -> void;
-
-    auto setAppEnv(const char* _envName, const QByteArray& _value) noexcept -> void;
-
-    auto setAppAttribute(const Qt::ApplicationAttribute _attribute, bool _switch = true) noexcept -> void;
+    auto init(const QString& _quickStyle = QString{}, const QVector<Qt::ApplicationAttribute>& _attributeVector = QVector<Qt::ApplicationAttribute>{}, const QVariantMap& _envVariantMap = QVariantMap{}) noexcept -> void;
 
 private:
     explicit(true) ApplicationConfig(QObject* _parent = nullptr);
 
-    auto initAppEnv() noexcept -> void;
+    auto initAppStyle(const QString& _quickStyle = QString{}) noexcept -> void;
 
-    auto initAppStyle() noexcept -> void;
+    auto initAppAttribute(const QVector<Qt::ApplicationAttribute>& _attributeVector = QVector<Qt::ApplicationAttribute>{}) noexcept -> void;
 
-    auto initAppAttribute() noexcept -> void;
+    auto initAppEnv(const QVariantMap& _envVariantMap = QVariantMap{}) noexcept -> void;
 };

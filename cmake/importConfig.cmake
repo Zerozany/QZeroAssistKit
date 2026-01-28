@@ -8,20 +8,10 @@ target_compile_definitions(${PROJECT_NAME}
     QZeroAssistKit
 )
 
-set(QT_QML_GENERATE_QMLLS_INI OFF)
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    QT_QMLCACHEGEN_ARGUMENTS "--verbose" # "--direct-calls" "--verbose"
-)
-
 if(MSVC)
     target_compile_options(${PROJECT_NAME}
         PRIVATE
-        "$<$<CXX_COMPILER_ID:MSVC>:/Z7>"
-    )
-
-    target_compile_options(${PROJECT_NAME}
-        PRIVATE
+        "$<$<CONFIG:Debug>:/Z7>"
         "/utf-8"
         "/FS"
     )
