@@ -3,19 +3,18 @@ file(GLOB SRCFILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     "${CMAKE_CURRENT_SOURCE_DIR}/src/**/*.cpp"
 )
 
-qt_add_qml_module(${PROJECT_NAME}
-    URI "${PROJECT_NAME}"
-    VERSION 1.0
-    QML_FILES
-    SOURCES ${SRCFILES}
+file(GLOB INCLUDEDIR
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*/"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/**/*/"
 )
 
-file(GLOB INCLUDEDIR "${CMAKE_CURRENT_SOURCE_DIR}/src/*")
+target_sources(${PROJECT_NAME}
+    PRIVATE
+    ${SRCFILES}
+)
 
-foreach(HEADERDIR ${INCLUDEDIR})
-    if(NOT IS_DIRECTORY ${HEADERDIR})
-        continue()
-    endif()
-
-    target_include_directories(${PROJECT_NAME} PUBLIC ${HEADERDIR})
-endforeach()
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+    ${INCLUDEDIR}
+)

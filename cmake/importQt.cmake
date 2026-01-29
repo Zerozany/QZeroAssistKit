@@ -16,17 +16,16 @@ qt_standard_project_setup(
     REQUIRES 6.8
 )
 
-qt_add_library(${PROJECT_NAME} SHARED)
+qt_add_qml_module(${PROJECT_NAME}
+    URI "${PROJECT_NAME}"
+    VERSION 1.0
+    SHARED
+)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-    Qt6::Quick
-    Qt6::Qml
     Qt6::Core
+    Qt6::Quick
     Qt6::QuickControls2
-)
-
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE "$<$<CONFIG:Release>:TRUE>$<$<NOT:$<CONFIG:Release>>:FALSE>"
-    WIN32_EXECUTABLE "$<$<CONFIG:Debug>:FALSE>$<$<NOT:$<CONFIG:Debug>>:TRUE>"
+    Qt6::Qml
 )

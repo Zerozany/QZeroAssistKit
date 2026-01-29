@@ -30,8 +30,8 @@ void Translator::onLanguageChanged()
 
 Translator* Translator::create(QQmlEngine* _qmlEngine, QJSEngine* _qJSEngine)
 {
-    static Translator translator{qobject_cast<QQmlApplicationEngine*>(_qmlEngine)};
-    return &translator;
+    static Translator* translator{new Translator{qobject_cast<QQmlApplicationEngine*>(_qmlEngine)}};
+    return translator;
 }
 
 QString Translator::language() const
