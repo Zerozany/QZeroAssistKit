@@ -1,4 +1,4 @@
-set(QT_QML_GENERATE_QMLLS_INI OFF)
+# set(QT_QML_GENERATE_QMLLS_INI OFF)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE "$<$<CONFIG:Release>:TRUE>$<$<NOT:$<CONFIG:Release>>:FALSE>"
