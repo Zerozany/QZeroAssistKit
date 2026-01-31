@@ -13,6 +13,15 @@ _Pragma("once");
     #define QZERO_API
 #endif
 
+struct AppStyle
+{
+    QString WindowStyle{};
+    QString UnixStyle{};
+    QString AndroidStyle{};
+    QString MacStyle{};
+    QString IosStyle{};
+};
+
 class QZERO_API ApplicationConfigBase : public QObject
 {
     Q_OBJECT
@@ -21,9 +30,9 @@ public:
     ~ApplicationConfigBase() noexcept = default;
 
 protected:
-    virtual auto initAppStyle() noexcept -> void = 0;
+    virtual auto initAppStyle(const AppStyle& _appStyle) noexcept -> void;
 
-    virtual auto initAppAttribute() noexcept -> void = 0;
+    virtual auto initAppAttribute(const QMap<Qt::ApplicationAttribute, bool>& _attributeMap) noexcept -> void;
 
-    virtual auto initAppEnv() noexcept -> void = 0;
+    virtual auto initAppEnv(const QMap<const char*, QByteArrayView>& _envMap) noexcept -> void;
 };
