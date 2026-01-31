@@ -8,18 +8,18 @@ ApplicationConfigBase::ApplicationConfigBase(QObject* _parent) : QObject{_parent
 {
 }
 
-auto ApplicationConfigBase::initAppStyle(const AppStyle& _appStyle) noexcept -> void
+auto ApplicationConfigBase::initAppStyle(const ApplicationStyle& _applicationStyle) noexcept -> void
 {
 #if defined(Q_OS_ANDROID)
-    QQuickStyle::setStyle(_appStyle.AndroidStyle);
+    QQuickStyle::setStyle(_applicationStyle.AndroidStyle);
 #elif defined(Q_OS_WINDOWS)
-    QQuickStyle::setStyle(_appStyle.WindowStyle);
+    QQuickStyle::setStyle(_applicationStyle.WindowStyle);
 #elif defined(Q_OS_IOS)
-    QQuickStyle::setStyle(_appStyle.IosStyle);
+    QQuickStyle::setStyle(_applicationStyle.IosStyle);
 #elif defined(Q_OS_MACOS)
-    QQuickStyle::setStyle(_appStyle.MacStyle);
+    QQuickStyle::setStyle(_applicationStyle.MacStyle);
 #elif defined(Q_OS_LINUX)
-    QQuickStyle::setStyle(_appStyle.UnixStyle);
+    QQuickStyle::setStyle(_applicationStyle.UnixStyle);
 #endif
 }
 

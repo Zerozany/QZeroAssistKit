@@ -13,7 +13,7 @@ _Pragma("once");
     #define QZERO_API
 #endif
 
-struct AppStyle
+struct ApplicationStyle
 {
     QString WindowStyle{};
     QString UnixStyle{};
@@ -30,7 +30,7 @@ public:
     ~ApplicationConfigBase() noexcept = default;
 
 protected:
-    virtual auto initAppStyle(const AppStyle& _appStyle) noexcept -> void;
+    virtual auto initAppStyle(const ApplicationStyle& _applicationStyle) noexcept -> void;
 
     virtual auto initAppAttribute(const QMap<Qt::ApplicationAttribute, bool>& _attributeMap) noexcept -> void;
 
