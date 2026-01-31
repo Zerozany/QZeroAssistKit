@@ -29,7 +29,7 @@ public:
     explicit(true) ApplicationConfigBase(QObject* _parent = nullptr);
     ~ApplicationConfigBase() noexcept = default;
 
-protected:
+public:
     virtual auto initAppStyle(const ApplicationStyle& _applicationStyle) noexcept -> void;
 
     virtual auto initAppAttribute(const QMap<Qt::ApplicationAttribute, bool>& _attributeMap) noexcept -> void;
