@@ -27,5 +27,5 @@ protected:
     virtual auto engineLaod() noexcept -> void = 0;
 
 protected:
-    QQmlApplicationEngine& m_qmlApplicationEngine [[indeterminate]];
+    QQmlApplicationEngine& m_qmlApplicationEngine;
 };
