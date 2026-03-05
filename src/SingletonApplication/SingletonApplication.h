@@ -18,11 +18,13 @@ class QZERO_API SingletonApplication : public QObject
 {
     Q_OBJECT
 public:
-    ~SingletonApplication() noexcept = default;
-
-public:
     static auto instance(QObject* _parent = nullptr) noexcept -> SingletonApplication*;
 
+    ~SingletonApplication() noexcept = default;
+
+    Q_DISABLE_COPY_MOVE(SingletonApplication)
+
+public:
     auto init() noexcept -> void;
 
 private:
