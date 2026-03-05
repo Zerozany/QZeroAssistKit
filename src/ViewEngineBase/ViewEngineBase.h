@@ -24,7 +24,7 @@ public:
 protected:
     virtual auto connectSignal2Slot() noexcept -> void;
 
-    virtual auto engineLaod() noexcept -> void = 0;
+    virtual auto engineLoad() noexcept -> void = 0;
 
 protected:
     QQmlApplicationEngine& m_qmlApplicationEngine;
