@@ -18,7 +18,7 @@ class QZERO_API SingletonApplication : public QObject
 {
     Q_OBJECT
 public:
-    static auto instance(QObject* _parent = nullptr) noexcept -> SingletonApplication*;
+    static auto instance(const QString& _processID = "SingletonApplicationKey", QObject* _parent = nullptr) noexcept -> SingletonApplication*;
 
     ~SingletonApplication() noexcept = default;
 
@@ -28,8 +28,9 @@ public:
     auto init() noexcept -> void;
 
 private:
-    explicit(true) SingletonApplication(QObject* _parent = nullptr);
+    explicit(true) SingletonApplication(const QString& _processID, QObject* _parent = nullptr);
 
 private:
     QSharedMemory m_shareMemory{};
+    QString       m_processID{};
 };
