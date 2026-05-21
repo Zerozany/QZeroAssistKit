@@ -45,6 +45,8 @@ public:
 public:
     Q_INVOKABLE void addNewClassMate();
 
+    Q_INVOKABLE void saveClassMate(const ClassMate* _classMate);
+
 private:
     explicit(true) ClassesManager(QObject* _parent = nullptr);
 

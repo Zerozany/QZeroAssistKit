@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QFile>
 
+constexpr const char* ClassMateJsonName{"ClassMate.json"};
+
 ClassesManager::ClassesManager(QObject* _parent) : QObject{_parent}
 {
     std::invoke(&ClassesManager::connectSignal2Slot, this);
@@ -20,6 +22,22 @@ void ClassesManager::addNewClassMate()
     QVariantList variantList{m_classesList};
     variantList.append(QVariant::fromValue(classMate));
     this->setClassesList(variantList);
+}
+
+void ClassesManager::saveClassMate(const ClassMate* _classMate)
+{
+    if (!QDir{}.mkpath(m_localClassesPath))
+    {
+        return;
+    }
+    QFile classFile{m_localClassesPath + QDir::separator() + _classMate->classID() + QDir::separator() + QString::fromUtf8(ClassMateJsonName)};
+    if (!classFile.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        return;
+    }
+    QTextStream inputStream{&classFile};
+    inputStream << _classMate;
+    classFile.close();
 }
 
 void ClassesManager::onClassesListChanged()

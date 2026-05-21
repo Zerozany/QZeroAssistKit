@@ -10,8 +10,8 @@ ClassMate::ClassMate(QObject* _parent) : QObject{_parent}
 auto ClassMate::initBasicInfo() noexcept -> void
 {
     QDateTime currentTime{QDateTime::currentDateTime()};
-    m_classID   = currentTime.toString("yyyyMMddHHmmss");
-    m_creatTime = currentTime.toString("yyyy-MM-dd HH:mm:ss");
+    this->setClassID(currentTime.toString("yyyyMMddHHmmss"));
+    this->setCreatTime(currentTime.toString("yyyy-MM-dd HH:mm:ss"));
 }
 
 QString ClassMate::classID() const
@@ -64,7 +64,7 @@ auto ClassMate::toJson() const noexcept -> QJsonObject
     QJsonObject jsonObject{};
     jsonObject["classID"]   = this->classID();
     jsonObject["creatTime"] = this->creatTime();
-    jsonObject["endTime"]   = this->endTime();
+    jsonObject["endTime"]   = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     return jsonObject;
 }
 
