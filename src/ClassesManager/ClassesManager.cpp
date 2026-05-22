@@ -70,6 +70,7 @@ ClassMate* ClassesManager::getClassMate(const QString& _classMateID)
         }
         return classMate.value<ClassMate*>();
     }
+    return nullptr;
 }
 
 QVariantList ClassesManager::queryClassMate(const QString& _classMateID)
