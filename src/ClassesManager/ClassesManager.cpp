@@ -40,17 +40,59 @@ void ClassesManager::saveClassMate(const ClassMate* _classMate)
     classFile.close();
 }
 
+void ClassesManager::deleteClassMate(const ClassMate* _classMate)
+{
+    if (!QDir{m_localClassesPath + QDir::separator() + _classMate->classID()}.removeRecursively())
+    {
+        qWarning() << "remove classMate dir failed";
+    }
+    QVariantList tmpVariantList{m_classesList};
+    for (qsizetype i{tmpVariantList.size() - 1}; i >= 0; --i)
+    {
+        if (tmpVariantList[i].value<ClassMate*>()->classID() != _classMate->classID())
+        {
+            continue;
+        }
+        tmpVariantList.removeAt(i);
+        this->setClassesList(tmpVariantList);
+        break;
+    }
+}
+
+ClassMate* ClassesManager::getClassMate(const QString& _classMateID)
+{
+    for (auto classMate : m_classesList)
+    {
+        if (classMate.value<ClassMate*>()->classID() != _classMateID)
+        {
+            continue;
+        }
+        return classMate.value<ClassMate*>();
+    }
+}
+
 void ClassesManager::onClassesListChanged()
 {
 }
 
 void ClassesManager::onLocalClassesPathChanged()
 {
-    m_classesList.clear();
-    QStringList classesDirs{QDir{m_localClassesPath}.entryList(QDir::Dirs | QDir::NoDotAndDotDot)};
+    QVariantList tmpVariantList{};
+    QStringList  classesDirs{QDir{m_localClassesPath}.entryList(QDir::Dirs | QDir::NoDotAndDotDot)};
     for (const auto& _mate : classesDirs)
     {
+        QFile classFile{m_localClassesPath + QDir::separator() + _mate + QDir::separator() + QString::fromUtf8(ClassMateJsonName)};
+        if (!classFile.exists() || !classFile.open(QIODevice::ReadOnly))
+        {
+            continue;
+        }
+        QTextStream outputStream{&classFile};
+        ClassMate*  cassMate{new ClassMate{this}};
+        outputStream >> *cassMate;
+        classFile.close();
+        tmpVariantList.append(QVariant::fromValue(cassMate));
     }
+    this->setClassesList(tmpVariantList);
 }
 
 ClassesManager* ClassesManager::create(QQmlEngine*, QJSEngine*)

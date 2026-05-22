@@ -47,6 +47,10 @@ public:
 
     Q_INVOKABLE void saveClassMate(const ClassMate* _classMate);
 
+    Q_INVOKABLE void deleteClassMate(const ClassMate* _classMate);
+
+    Q_INVOKABLE ClassMate* getClassMate(const QString& _classMateID);
+
 private:
     explicit(true) ClassesManager(QObject* _parent = nullptr);
 
