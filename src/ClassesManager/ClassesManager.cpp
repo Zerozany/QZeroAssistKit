@@ -40,11 +40,11 @@ void ClassesManager::saveClassMate(const ClassMate* _classMate)
     classFile.close();
 }
 
-void ClassesManager::deleteClassMate(const ClassMate* _classMate)
+bool ClassesManager::deleteClassMate(const ClassMate* _classMate)
 {
     if (!QDir{m_localClassesPath + QDir::separator() + _classMate->classID()}.removeRecursively())
     {
-        qWarning() << "remove classMate dir failed";
+        return false;
     }
     QVariantList tmpVariantList{m_classesList};
     for (qsizetype i{tmpVariantList.size() - 1}; i >= 0; --i)
@@ -57,6 +57,7 @@ void ClassesManager::deleteClassMate(const ClassMate* _classMate)
         break;
     }
     this->setClassesList(tmpVariantList);
+    return true;
 }
 
 ClassMate* ClassesManager::getClassMate(const QString& _classMateID)
