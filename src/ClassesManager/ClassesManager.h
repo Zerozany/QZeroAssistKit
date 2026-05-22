@@ -51,10 +51,12 @@ public:
 
     Q_INVOKABLE ClassMate* getClassMate(const QString& _classMateID);
 
-private:
+    Q_INVOKABLE virtual QVariantList queryClassMate(const QString& _classMateID);
+
+protected:
     explicit(true) ClassesManager(QObject* _parent = nullptr);
 
-    auto connectSignal2Slot() noexcept -> void;
+    virtual auto connectSignal2Slot() noexcept -> void;
 
 Q_SIGNALS:
     void classesListChanged();
@@ -64,8 +66,6 @@ Q_SIGNALS:
     void localClassesPathChanged();
 
 private Q_SLOTS:
-    void onClassesListChanged();
-
     void onLocalClassesPathChanged();
 
 private:

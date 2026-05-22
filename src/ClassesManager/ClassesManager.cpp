@@ -12,16 +12,16 @@ ClassesManager::ClassesManager(QObject* _parent) : QObject{_parent}
 
 auto ClassesManager::connectSignal2Slot() noexcept -> void
 {
-    connect(this, &ClassesManager::classesListChanged, this, &ClassesManager::onClassesListChanged);
     connect(this, &ClassesManager::localClassesPathChanged, this, &ClassesManager::onLocalClassesPathChanged);
 }
 
 void ClassesManager::addNewClassMate()
 {
     ClassMate*   classMate{new ClassMate{this}};
-    QVariantList variantList{m_classesList};
-    variantList.append(QVariant::fromValue(classMate));
-    this->setClassesList(variantList);
+    QVariantList tmpVariantList{m_classesList};
+    tmpVariantList.append(QVariant::fromValue(classMate));
+    this->setClassesList(tmpVariantList);
+    this->setCurrentClassMate(classMate);
 }
 
 void ClassesManager::saveClassMate(const ClassMate* _classMate)
@@ -54,9 +54,9 @@ void ClassesManager::deleteClassMate(const ClassMate* _classMate)
             continue;
         }
         tmpVariantList.removeAt(i);
-        this->setClassesList(tmpVariantList);
         break;
     }
+    this->setClassesList(tmpVariantList);
 }
 
 ClassMate* ClassesManager::getClassMate(const QString& _classMateID)
@@ -71,8 +71,18 @@ ClassMate* ClassesManager::getClassMate(const QString& _classMateID)
     }
 }
 
-void ClassesManager::onClassesListChanged()
+QVariantList ClassesManager::queryClassMate(const QString& _classMateID)
 {
+    QVariantList variantList{};
+    for (auto classMate : m_classesList)
+    {
+        if (classMate.value<ClassMate*>()->classID() != _classMateID)
+        {
+            continue;
+        }
+        variantList.append(classMate);
+    }
+    return variantList;
 }
 
 void ClassesManager::onLocalClassesPathChanged()
