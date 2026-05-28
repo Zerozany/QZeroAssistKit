@@ -1,7 +1,7 @@
 _Pragma("once");
 #include <QObject>
 
-class SqlManager
+class SqlManager : public QObject
 {
     Q_OBJECT
 public:
