@@ -2,6 +2,7 @@ _Pragma("once");
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlRecord>
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
     #ifdef QZeroAssistKit
