@@ -3,7 +3,19 @@ _Pragma("once");
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-class SqlManager : public QObject
+#if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
+    #ifdef QZeroAssistKit
+        #define QZERO_API Q_DECL_EXPORT
+    #else
+        #define QZERO_API Q_DECL_IMPORT
+    #endif
+#elif defined(__GNUC__) || defined(__clang__)
+    #define QZERO_API __attribute__((visibility("default")))
+#else
+    #define QZERO_API
+#endif
+
+class QZERO_API SqlManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString dataBaseName READ dataBaseName WRITE setDatabaseName NOTIFY databaseNameChanged)
@@ -41,25 +53,29 @@ private:
 template <typename ReturnType>
 inline auto SqlManager::executeSql(const QString& _dataBaseName, const QString& _sqlCode) -> ReturnType
 {
-    if (!m_databasesList.contains(_dataBaseName))
+    QSqlQuery query{};
+    do
     {
-        qWarning() << "Database not found:" << _dataBaseName;
-        return ReturnType{};
-    }
-    QSqlDatabase dataBase{m_databasesList.value(_dataBaseName)};
-    if (!dataBase.isOpen() && !dataBase.open())
+        if (!m_databasesList.contains(_dataBaseName))
+        {
+            qWarning() << "Database not found:" << _dataBaseName;
+            break;
+        }
+        QSqlDatabase dataBase{m_databasesList.value(_dataBaseName)};
+        query = QSqlQuery{dataBase};
+        if (!dataBase.isOpen() && !dataBase.open())
+        {
+            qWarning() << "Cannot open database:" << _dataBaseName;
+            break;
+        }
+        if (!query.exec(_sqlCode))
+        {
+            qWarning() << "Execute sqlCode failed:" << _sqlCode;
+            break;
+        }
+    } while (false);
+    if constexpr (std::is_same_v<ReturnType, QSqlQuery>)
     {
-        qWarning() << "Cannot open database:" << _dataBaseName;
-        return ReturnType{};
+        return query;
     }
-    QSqlQuery query{dataBase};
-    if (!query.exec(_sqlCode))
-    {
-        qWarning() << "Execute sqlCode failed:" << _sqlCode;
-    }
-    if constexpr (std::is_void_v<ReturnType>)
-    {
-        return ReturnType{};
-    }
-    return query;
 }

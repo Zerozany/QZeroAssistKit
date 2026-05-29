@@ -48,7 +48,7 @@ auto SqlManager::connectSignal2Slot() -> void
 
 void SqlManager::onDatabaseNameChanged()
 {
-    if (QSqlDatabase::contains(this->dataBaseName()))
+    if (QSqlDatabase::contains(this->dataBaseName().chopped(3)))
     {
         return;
     }
@@ -58,5 +58,5 @@ void SqlManager::onDatabaseNameChanged()
     {
         qWarning() << "Database not open:" << this->dataBaseName();
     }
-    m_databasesList.insert(this->dataBaseName(), QSqlDatabase::addDatabase(SqlDriverName, this->dataBaseName().chopped(3)));
+    m_databasesList.insert(this->dataBaseName().chopped(3), qSqlDatabase);
 }
