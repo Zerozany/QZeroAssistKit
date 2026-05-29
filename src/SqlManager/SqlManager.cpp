@@ -1,4 +1,9 @@
 #include "SqlManager.h"
+#include <QCoreApplication>
+#include <QDir>
+#include <QFile>
+#include <QStandardPaths>
+#include <QSqlError>
 
 constexpr const char* SqlDriverName{"QSQLITE"};
 
@@ -26,12 +31,12 @@ SqlManager::SqlManager(QObject* _parent) : QObject{_parent}
     std::invoke(&SqlManager::connectSignal2Slot, this);
 }
 
-QString SqlManager::dataBaseName() const
+QPair<QString, DataBasePathType> SqlManager::dataBaseName() const
 {
     return m_dataBaseName;
 }
 
-void SqlManager::setDatabaseName(const QString& _dataBaseName)
+void SqlManager::setDatabaseName(const QPair<QString, DataBasePathType>& _dataBaseName)
 {
     if (m_dataBaseName == _dataBaseName)
     {
@@ -48,15 +53,32 @@ auto SqlManager::connectSignal2Slot() -> void
 
 void SqlManager::onDatabaseNameChanged()
 {
-    if (QSqlDatabase::contains(this->dataBaseName().chopped(3)))
+    QString dataBasePath{this->dataBaseName().first};
+    if (this->dataBaseName().second == DataBasePathType::ResourcePath && dataBasePath.startsWith(":"))
+    {
+#if defined(Q_OS_WINDOWS)
+        dataBasePath = qApp->applicationDirPath() + this->dataBaseName().first.mid(1);
+#elif defined(Q_OS_ANDROID)
+        dataBasePath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + this->dataBaseName().first.mid(1);
+#endif
+        if (!QDir{}.mkpath(QFileInfo{dataBasePath}.absolutePath()))
+        {
+            return;
+        }
+        if (!QFile::exists(dataBasePath))
+        {
+            QFile::copy(this->dataBaseName().first, dataBasePath);
+        }
+    }
+    QSqlDatabase qSqlDatabase{QSqlDatabase::addDatabase(SqlDriverName, dataBasePath.left(dataBasePath.lastIndexOf('.')))};
+    qSqlDatabase.setDatabaseName(dataBasePath);
+    if (!qSqlDatabase.open())
+    {
+        qWarning() << "Database not open:" << qSqlDatabase.lastError().text();
+    }
+    if (m_databasesList.contains(dataBasePath.left(dataBasePath.lastIndexOf('.'))))
     {
         return;
     }
-    QSqlDatabase qSqlDatabase{QSqlDatabase::addDatabase(SqlDriverName, this->dataBaseName().chopped(3))};
-    qSqlDatabase.setDatabaseName(this->dataBaseName());
-    if (!qSqlDatabase.open())
-    {
-        qWarning() << "Database not open:" << this->dataBaseName();
-    }
-    m_databasesList.insert(this->dataBaseName().chopped(3), qSqlDatabase);
+    m_databasesList.insert(this->dataBaseName().first, qSqlDatabase);
 }

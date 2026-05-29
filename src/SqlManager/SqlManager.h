@@ -4,6 +4,12 @@ _Pragma("once");
 #include <QSqlQuery>
 #include <QSqlRecord>
 
+enum class DataBasePathType
+{
+    Normal,
+    ResourcePath,
+};
+
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
     #ifdef QZeroAssistKit
         #define QZERO_API Q_DECL_EXPORT
@@ -19,7 +25,7 @@ _Pragma("once");
 class QZERO_API SqlManager : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString dataBaseName READ dataBaseName WRITE setDatabaseName NOTIFY databaseNameChanged)
+    Q_PROPERTY(QPair<QString, DataBasePathType> dataBaseName READ dataBaseName WRITE setDatabaseName NOTIFY databaseNameChanged)
 public:
     static auto instance(QObject* _parent = nullptr) -> SqlManager*;
 
@@ -27,8 +33,8 @@ public:
 
     Q_DISABLE_COPY_MOVE(SqlManager)
 public:
-    QString dataBaseName() const;
-    void    setDatabaseName(const QString& _dataBaseName);
+    QPair<QString, DataBasePathType> dataBaseName() const;
+    void                             setDatabaseName(const QPair<QString, DataBasePathType>& _dataBaseName);
 
 public:
     template <typename ReturnType>
@@ -47,8 +53,8 @@ private Q_SLOTS:
     void onDatabaseNameChanged();
 
 private:
-    QMap<QString, QSqlDatabase> m_databasesList{};
-    QString                     m_dataBaseName{};
+    QMap<QString, QSqlDatabase>      m_databasesList{};
+    QPair<QString, DataBasePathType> m_dataBaseName{};
 };
 
 template <typename ReturnType>
