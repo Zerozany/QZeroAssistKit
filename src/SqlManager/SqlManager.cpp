@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QStandardPaths>
 #include <QSqlError>
+#include <QRegularExpression>
 
 constexpr const char* SqlDriverName{"QSQLITE"};
 
@@ -54,12 +55,12 @@ auto SqlManager::connectSignal2Slot() -> void
 void SqlManager::onDatabaseNameChanged()
 {
     QString dataBasePath{this->dataBaseName().first};
-    if (this->dataBaseName().second == DataBasePathType::ResourcePath && dataBasePath.startsWith(":"))
+    if (this->dataBaseName().second == DataBasePathType::ResourcePath)
     {
 #if defined(Q_OS_WINDOWS)
-        dataBasePath = qApp->applicationDirPath() + this->dataBaseName().first.mid(1);
+        dataBasePath = qApp->applicationDirPath() + this->dataBaseName().first.remove(QRegularExpression{"^.*:"});
 #elif defined(Q_OS_ANDROID)
-        dataBasePath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + this->dataBaseName().first.mid(1);
+        dataBasePath = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + this->dataBaseName().first.remove(QRegularExpression{"^.*:"});
 #endif
         if (!QDir{}.mkpath(QFileInfo{dataBasePath}.absolutePath()))
         {
