@@ -2,9 +2,8 @@
 #include <QGuiApplication>
 #include <QJSEngine>
 #include <QQmlEngine>
-#include <QQmlApplicationEngine>
 
-Translator::Translator(QQmlApplicationEngine* _qmlApplicationEngine, QTranslator* _parent) : QTranslator{_parent}, m_qmlApplicationEngine{_qmlApplicationEngine}
+Translator::Translator(QQmlEngine* _engine, QTranslator* _parent) : QTranslator{_parent}, m_engine{_engine}
 {
     std::invoke(&Translator::connectSignal2Slot, this);
 }
@@ -22,16 +21,16 @@ void Translator::onLanguageChanged()
         qApp->installTranslator(this);
     }
     // TODO1 QML引擎需调用retranslate()方法
-    if (m_qmlApplicationEngine)
+    if (m_engine)
     {
-        m_qmlApplicationEngine->retranslate();
+        m_engine->retranslate();
     }
 }
 
 Translator* Translator::create(QQmlEngine* _qmlEngine, QJSEngine* _qJSEngine)
 {
-    Q_UNUSED(_qJSEngine);
-    static Translator* translator{new Translator{qobject_cast<QQmlApplicationEngine*>(_qmlEngine)}};
+    Q_UNUSED(_qJSEngine)
+    static Translator* translator{new Translator{_qmlEngine}};
     return translator;
 }
 

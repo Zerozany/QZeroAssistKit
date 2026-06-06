@@ -17,7 +17,6 @@ _Pragma("once");
 
 class QJSEngine;
 class QQmlEngine;
-class QQmlApplicationEngine;
 
 class QZERO_API Translator : public QTranslator
 {
@@ -26,16 +25,16 @@ class QZERO_API Translator : public QTranslator
     QML_ELEMENT
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
 public:
+    static Translator* create(QQmlEngine* _qmlEngine = nullptr, QJSEngine* _qJSEngine = nullptr);
+
     ~Translator() noexcept = default;
 
 public:
-    static Translator* create(QQmlEngine* _qmlEngine = nullptr, QJSEngine* _qJSEngine = nullptr);
-
     Q_INVOKABLE QString language() const;
     Q_INVOKABLE void    setLanguage(const QString& _language);
 
 private:
-    explicit(true) Translator(QQmlApplicationEngine* _qmlApplicationEngine = nullptr, QTranslator* _parent = nullptr);
+    explicit(true) Translator(QQmlEngine* _engine, QTranslator* _parent = nullptr);
 
     auto connectSignal2Slot() noexcept -> void;
 
@@ -46,6 +45,6 @@ private Q_SLOTS:
     void onLanguageChanged();
 
 private:
-    QString                m_language{};
-    QQmlApplicationEngine* m_qmlApplicationEngine{nullptr};
+    QString     m_language{};
+    QQmlEngine* m_engine{};
 };
