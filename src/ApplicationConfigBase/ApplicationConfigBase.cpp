@@ -4,6 +4,12 @@
 #include <QMap>
 #include <ranges>
 
+auto ApplicationConfigBase::instance() noexcept -> ApplicationConfigBase*
+{
+    static ApplicationConfigBase applicationConfigBase{};
+    return &applicationConfigBase;
+}
+
 ApplicationConfigBase::ApplicationConfigBase(QObject* _parent) : QObject{_parent}
 {
 }

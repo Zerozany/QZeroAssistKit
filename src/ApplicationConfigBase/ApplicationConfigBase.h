@@ -26,8 +26,13 @@ class QZERO_API ApplicationConfigBase : public QObject
 {
     Q_OBJECT
 public:
-    explicit(true) ApplicationConfigBase(QObject* _parent = nullptr);
+    static auto instance() noexcept -> ApplicationConfigBase*;
+
     ~ApplicationConfigBase() noexcept = default;
+
+    Q_DISABLE_COPY_MOVE(ApplicationConfigBase)
+protected:
+    explicit(true) ApplicationConfigBase(QObject* _parent = nullptr);
 
 protected:
     virtual auto initAppStyle(const ApplicationStyle& _applicationStyle) noexcept -> void;

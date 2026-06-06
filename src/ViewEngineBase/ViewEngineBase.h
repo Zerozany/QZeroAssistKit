@@ -18,8 +18,10 @@ class QZERO_API ViewEngineBase : public QObject
 {
     Q_OBJECT
 public:
-    explicit(true) ViewEngineBase(QQmlApplicationEngine& _qmlApplicationEngine, QObject* _parent = nullptr);
     ~ViewEngineBase() noexcept = default;
+
+protected:
+    explicit(true) ViewEngineBase(QQmlApplicationEngine& _qmlApplicationEngine, QObject* _parent = nullptr);
 
 protected:
     virtual auto connectSignal2Slot() noexcept -> void;
