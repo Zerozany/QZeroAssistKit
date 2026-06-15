@@ -20,7 +20,7 @@ void Translator::onLanguageChanged()
     {
         qApp->installTranslator(this);
     }
-    // TODO1 QML引擎需调用retranslate()方法
+    // QML引擎需调用retranslate()方法
     if (m_engine)
     {
         m_engine->retranslate();

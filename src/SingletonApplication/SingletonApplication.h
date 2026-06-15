@@ -27,7 +27,7 @@ public:
 public:
     auto init() noexcept -> void;
 
-private:
+protected:
     explicit(true) SingletonApplication(const QString& _processID, QObject* _parent = nullptr);
 
 private:

@@ -15,6 +15,6 @@ auto SingletonApplication::init() noexcept -> void
     m_shareMemory.setKey(m_processID);
     if (!m_shareMemory.create(1, QSharedMemory::ReadWrite))
     {
-        qFatal("%s", tr("当前应用已在系统中运行").toUtf8().constData());
+        qFatal("%s", tr("The current application is already running in the system").toUtf8().constData());
     }
 }
