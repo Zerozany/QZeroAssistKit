@@ -15,7 +15,7 @@ _Pragma("once");
 
 struct ApplicationStyle
 {
-    QString WindowStyle{};
+    QString WindowsStyle{};
     QString UnixStyle{};
     QString AndroidStyle{};
     QString MacStyle{};

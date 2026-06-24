@@ -19,7 +19,7 @@ auto ApplicationConfigBase::initAppStyle(const ApplicationStyle& _applicationSty
 #if defined(Q_OS_ANDROID)
     QQuickStyle::setStyle(_applicationStyle.AndroidStyle);
 #elif defined(Q_OS_WINDOWS)
-    QQuickStyle::setStyle(_applicationStyle.WindowStyle);
+    QQuickStyle::setStyle(_applicationStyle.WindowsStyle);
 #elif defined(Q_OS_IOS)
     QQuickStyle::setStyle(_applicationStyle.IosStyle);
 #elif defined(Q_OS_MACOS)
