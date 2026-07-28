@@ -6,7 +6,7 @@
 #include <QSqlError>
 #include <QRegularExpression>
 
-constexpr const char* SqlDriverName{"QSQLITE"};
+static constexpr const char* SqlDriverName{"QSQLITE"};
 
 auto SqlManager::instance(QObject* _parent) -> SqlManager*
 {

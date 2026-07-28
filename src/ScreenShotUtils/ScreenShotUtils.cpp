@@ -12,7 +12,7 @@ namespace Private
 {
     static constexpr const char* ImageNameFormat{"yyyyMMdd_HHmmss_zzz"};
 
-    static auto imageFormatToString(const ScreenShotUtils::ImageFormat& _imageFormat) noexcept -> const QString
+    static auto imageFormatToString(const ScreenShotUtils::ImageFormat& _imageFormat) noexcept -> QString
     {
         switch (_imageFormat)
         {

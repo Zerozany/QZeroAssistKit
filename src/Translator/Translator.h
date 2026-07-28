@@ -29,9 +29,11 @@ public:
 
     ~Translator() noexcept = default;
 
+    Q_DISABLE_COPY_MOVE(Translator)
+
 public:
-    Q_INVOKABLE QString language() const;
-    Q_INVOKABLE void    setLanguage(const QString& _language);
+    QString language() const;
+    void    setLanguage(const QString& _language);
 
 private:
     explicit(true) Translator(QQmlEngine* _engine, QTranslator* _parent = nullptr);
