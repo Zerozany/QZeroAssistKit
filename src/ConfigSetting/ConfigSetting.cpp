@@ -3,10 +3,10 @@
 
 ConfigSetting::ConfigSetting(const QString& _fileName, Format _format, QObject* _parent) : QSettings{_fileName, _format, _parent}
 {
-    std::invoke(&ConfigSetting::loadProperties, this);
+    std::invoke(&ConfigSetting::init, this);
 }
 
-void ConfigSetting::loadProperties()
+void ConfigSetting::init()
 {
     const QMetaObject* meta{metaObject()};
     for (int i{meta->propertyOffset()}; i < meta->propertyCount(); ++i)

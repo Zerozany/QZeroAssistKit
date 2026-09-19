@@ -21,6 +21,6 @@ public:
 
     virtual ~ConfigSetting() noexcept = default;
 
-protected:
-    virtual void loadProperties();
+public:
+    virtual void init();
 };
