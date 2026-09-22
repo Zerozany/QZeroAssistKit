@@ -13,18 +13,18 @@ auto TcpSocket::connectSignal2Slot() noexcept -> void
     connect(this, &QTcpSocket::disconnected, this, &TcpSocket::onDisconnected);
 }
 
-auto TcpSocket::onReadyRead() -> void
+void TcpSocket::onReadyRead()
 {
 }
 
-auto TcpSocket::onBytesWritten(quint64 _bytes) -> void
+void TcpSocket::onBytesWritten(quint64 _bytes)
 {
 }
 
-auto TcpSocket::onConnected() -> void
+void TcpSocket::onConnected()
 {
 }
 
-auto TcpSocket::onDisconnected() -> void
+void TcpSocket::onDisconnected()
 {
 }

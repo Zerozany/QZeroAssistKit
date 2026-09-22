@@ -21,15 +21,15 @@ public:
 
     virtual ~TcpSocket() noexcept = default;
 
-private:
-    auto connectSignal2Slot() noexcept -> void;
+protected:
+    virtual auto connectSignal2Slot() noexcept -> void;
 
 protected Q_SLOTS:
-    virtual auto onReadyRead() -> void;
+    virtual void onReadyRead();
 
-    virtual auto onBytesWritten(quint64 _bytes) -> void;
+    virtual void onBytesWritten(quint64 _bytes);
 
-    virtual auto onConnected() -> void;
+    virtual void onConnected();
 
-    virtual auto onDisconnected() -> void;
+    virtual void onDisconnected();
 };
