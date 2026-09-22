@@ -2,8 +2,29 @@
 
 TcpSocket::TcpSocket(QObject* _parent) : QTcpSocket{_parent}
 {
+    std::invoke(&TcpSocket::connectSignal2Slot, this);
 }
 
-TcpSocket::TcpSocket(const QString& _host, quint16 _port, QObject* _parent) : QTcpSocket{_parent}, m_host{_host}, m_port{_port}
+auto TcpSocket::connectSignal2Slot() noexcept -> void
+{
+    connect(this, &QTcpSocket::readyRead, this, &TcpSocket::onReadyRead);
+    connect(this, &QTcpSocket::bytesWritten, this, &TcpSocket::onBytesWritten);
+    connect(this, &QTcpSocket::connected, this, &TcpSocket::onConnected);
+    connect(this, &QTcpSocket::disconnected, this, &TcpSocket::onDisconnected);
+}
+
+auto TcpSocket::onReadyRead() -> void
+{
+}
+
+auto TcpSocket::onBytesWritten(quint64 _bytes) -> void
+{
+}
+
+auto TcpSocket::onConnected() -> void
+{
+}
+
+auto TcpSocket::onDisconnected() -> void
 {
 }

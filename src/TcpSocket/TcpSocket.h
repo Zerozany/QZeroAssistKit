@@ -19,11 +19,17 @@ class QZERO_API TcpSocket : public QTcpSocket
 public:
     explicit(true) TcpSocket(QObject* _parent = nullptr);
 
-    explicit(true) TcpSocket(const QString& _host, quint16 _port, QObject* _parent = nullptr);
-
     virtual ~TcpSocket() noexcept = default;
 
-protected:
-    QString m_host{};
-    quint16 m_port{};
+private:
+    auto connectSignal2Slot() noexcept -> void;
+
+protected Q_SLOTS:
+    virtual auto onReadyRead() -> void;
+
+    virtual auto onBytesWritten(quint64 _bytes) -> void;
+
+    virtual auto onConnected() -> void;
+
+    virtual auto onDisconnected() -> void;
 };
