@@ -32,4 +32,6 @@ protected Q_SLOTS:
     virtual void onConnected();
 
     virtual void onDisconnected();
+
+    virtual void onErrorOccurred(const TcpSocket::SocketError& _error);
 };
