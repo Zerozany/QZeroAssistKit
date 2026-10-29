@@ -39,9 +39,8 @@ public:
     virtual void    setEndTime(const QString& _endTime);
 
 protected:
-    virtual auto initBasicInfo() noexcept -> void;
+    virtual auto init() noexcept -> void;
 
-protected:
     virtual auto toJson() const noexcept -> QJsonObject;
 
     virtual auto fromJson(const QJsonObject& _jsonObject) -> void;

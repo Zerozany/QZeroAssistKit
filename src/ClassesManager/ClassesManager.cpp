@@ -15,12 +15,15 @@ auto ClassesManager::connectSignal2Slot() noexcept -> void
     connect(this, &ClassesManager::localClassesPathChanged, this, &ClassesManager::onLocalClassesPathChanged);
 }
 
+auto ClassesManager::createClassMate() -> ClassMate*
+{
+    return new ClassMate{this};
+}
+
 void ClassesManager::addNewClassMate()
 {
-    ClassMate*   classMate{new ClassMate{this}};
-    QVariantList tmpVariantList{m_classesList};
-    tmpVariantList.append(QVariant::fromValue(classMate));
-    this->setClassesList(tmpVariantList);
+    ClassMate* classMate{this->createClassMate()};
+    this->setClassesList(m_classesList + QVariantList{QVariant::fromValue(classMate)});
     this->setCurrentClassMate(classMate);
 }
 
@@ -99,7 +102,7 @@ void ClassesManager::onLocalClassesPathChanged()
             continue;
         }
         QTextStream outputStream{&classFile};
-        ClassMate*  cassMate{new ClassMate{this}};
+        ClassMate*  cassMate{this->createClassMate()};
         outputStream >> *cassMate;
         classFile.close();
         tmpVariantList.append(QVariant::fromValue(cassMate));

@@ -53,6 +53,8 @@ public:
 protected:
     virtual auto connectSignal2Slot() noexcept -> void;
 
+    virtual auto createClassMate() -> ClassMate*;
+
 Q_SIGNALS:
     void classesListChanged();
 

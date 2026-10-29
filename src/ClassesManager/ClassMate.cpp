@@ -1,13 +1,14 @@
 #include "ClassMate.h"
 #include <QDateTime>
 #include <QJsonDocument>
+#include <QMetaProperty>
 
 ClassMate::ClassMate(QObject* _parent) : QObject{_parent}
 {
-    std::invoke(&ClassMate::initBasicInfo, this);
+    std::invoke(&ClassMate::init, this);
 }
 
-auto ClassMate::initBasicInfo() noexcept -> void
+auto ClassMate::init() noexcept -> void
 {
     QDateTime currentTime{QDateTime::currentDateTime()};
     this->setClassID(currentTime.toString("yyyyMMddHHmmss"));
@@ -16,18 +17,47 @@ auto ClassMate::initBasicInfo() noexcept -> void
 
 auto ClassMate::toJson() const noexcept -> QJsonObject
 {
-    QJsonObject jsonObject{};
-    jsonObject["classID"]   = this->classID();
-    jsonObject["creatTime"] = this->creatTime();
-    jsonObject["endTime"]   = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    QJsonObject        jsonObject{};
+    const QMetaObject* meta{this->metaObject()};
+    for (int i{}; i < meta->propertyCount(); ++i)
+    {
+        const QMetaProperty prop{meta->property(i)};
+        if (!prop.isReadable() || !prop.isStored())
+        {
+            continue;
+        }
+        const QVariant value{prop.read(this)};
+        if (!value.isValid() || value.userType() == QMetaType::QObjectStar)
+        {
+            continue;
+        }
+        jsonObject[QString::fromUtf8(prop.name())] = QJsonValue::fromVariant(value);
+    }
     return jsonObject;
 }
 
 auto ClassMate::fromJson(const QJsonObject& _jsonObject) -> void
 {
-    this->setClassID(_jsonObject.value("classID").toString());
-    this->setCreatTime(_jsonObject.value("creatTime").toString());
-    this->setEndTime(_jsonObject.value("endTime").toString());
+    const QMetaObject* meta{this->metaObject()};
+    for (int i{}; i < meta->propertyCount(); ++i)
+    {
+        const QMetaProperty prop{meta->property(i)};
+        if (!prop.isWritable() || !prop.isStored())
+        {
+            continue;
+        }
+        const QString key{QString::fromUtf8(prop.name())};
+        if (!_jsonObject.contains(key))
+        {
+            continue;
+        }
+        const QVariant value{_jsonObject.value(key).toVariant()};
+        if (!value.isValid())
+        {
+            continue;
+        }
+        prop.write(this, value);
+    }
 }
 
 QTextStream& operator<<(QTextStream& _outputStream, const ClassMate& _classMate)
