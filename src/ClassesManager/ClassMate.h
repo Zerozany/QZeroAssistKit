@@ -17,31 +17,34 @@ _Pragma("once");
 
 class QZERO_API ClassMate : public QObject
 {
+    friend QZERO_API QTextStream& operator<<(QTextStream& _outputStream, const ClassMate& _classMate);
+    friend QZERO_API QTextStream& operator>>(QTextStream& _inputStream, ClassMate& _classMate);
     Q_OBJECT
     Q_PROPERTY(QString classID READ classID WRITE setClassID NOTIFY classIDChanged)
     Q_PROPERTY(QString creatTime READ creatTime WRITE setCreatTime NOTIFY creatTimeChanged)
     Q_PROPERTY(QString endTime READ endTime WRITE setEndTime NOTIFY endTimeChanged)
 public:
     explicit(true) ClassMate(QObject* _parent = nullptr);
-    ~ClassMate() noexcept = default;
+
+    virtual ~ClassMate() noexcept = default;
 
 public:
-    QString classID() const;
-    void    setClassID(const QString& _classID);
+    virtual QString classID() const;
+    virtual void    setClassID(const QString& _classID);
 
-    QString creatTime() const;
-    void    setCreatTime(const QString& _creatTime);
+    virtual QString creatTime() const;
+    virtual void    setCreatTime(const QString& _creatTime);
 
-    QString endTime() const;
-    void    setEndTime(const QString& _endTime);
+    virtual QString endTime() const;
+    virtual void    setEndTime(const QString& _endTime);
 
-public:
+protected:
+    virtual auto initBasicInfo() noexcept -> void;
+
+protected:
     virtual auto toJson() const noexcept -> QJsonObject;
 
     virtual auto fromJson(const QJsonObject& _jsonObject) -> void;
-
-private:
-    auto initBasicInfo() noexcept -> void;
 
 Q_SIGNALS:
     void classIDChanged();
@@ -55,7 +58,3 @@ private:
     QString m_creatTime{};
     QString m_endTime{};
 };
-
-QTextStream& operator<<(QTextStream& _inputStream, const ClassMate& _classMate);
-
-QTextStream& operator>>(QTextStream& _outputStream, ClassMate& _classMate);

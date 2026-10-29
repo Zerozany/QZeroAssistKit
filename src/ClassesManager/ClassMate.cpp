@@ -14,6 +14,40 @@ auto ClassMate::initBasicInfo() noexcept -> void
     this->setCreatTime(currentTime.toString("yyyy-MM-dd HH:mm:ss"));
 }
 
+auto ClassMate::toJson() const noexcept -> QJsonObject
+{
+    QJsonObject jsonObject{};
+    jsonObject["classID"]   = this->classID();
+    jsonObject["creatTime"] = this->creatTime();
+    jsonObject["endTime"]   = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
+    return jsonObject;
+}
+
+auto ClassMate::fromJson(const QJsonObject& _jsonObject) -> void
+{
+    this->setClassID(_jsonObject.value("classID").toString());
+    this->setCreatTime(_jsonObject.value("creatTime").toString());
+    this->setEndTime(_jsonObject.value("endTime").toString());
+}
+
+QTextStream& operator<<(QTextStream& _outputStream, const ClassMate& _classMate)
+{
+    QJsonDocument jsonDocument{_classMate.toJson()};
+    _outputStream << jsonDocument.toJson(QJsonDocument::Indented);
+    return _outputStream;
+}
+
+QTextStream& operator>>(QTextStream& _inputStream, ClassMate& _classMate)
+{
+    QString       jsonStr{_inputStream.readAll()};
+    QJsonDocument jsonDocument{QJsonDocument::fromJson(jsonStr.toUtf8())};
+    if (jsonDocument.isObject())
+    {
+        _classMate.fromJson(jsonDocument.object());
+    }
+    return _inputStream;
+}
+
 QString ClassMate::classID() const
 {
     return m_classID;
@@ -57,38 +91,4 @@ void ClassMate::setEndTime(const QString& _endTime)
     }
     m_endTime = _endTime;
     Q_EMIT this->endTimeChanged();
-}
-
-auto ClassMate::toJson() const noexcept -> QJsonObject
-{
-    QJsonObject jsonObject{};
-    jsonObject["classID"]   = this->classID();
-    jsonObject["creatTime"] = this->creatTime();
-    jsonObject["endTime"]   = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
-    return jsonObject;
-}
-
-auto ClassMate::fromJson(const QJsonObject& _jsonObject) -> void
-{
-    this->setClassID(_jsonObject.value("classID").toString());
-    this->setCreatTime(_jsonObject.value("creatTime").toString());
-    this->setEndTime(_jsonObject.value("endTime").toString());
-}
-
-QTextStream& operator<<(QTextStream& _inputStream, const ClassMate& _classMate)
-{
-    QJsonDocument jsonDocument{_classMate.toJson()};
-    _inputStream << jsonDocument.toJson(QJsonDocument::Indented);
-    return _inputStream;
-}
-
-QTextStream& operator>>(QTextStream& _outputStream, ClassMate& _classMate)
-{
-    QString       jsonStr{_outputStream.readAll()};
-    QJsonDocument jsonDocument{QJsonDocument::fromJson(jsonStr.toUtf8())};
-    if (jsonDocument.isObject())
-    {
-        _classMate.fromJson(jsonDocument.object());
-    }
-    return _outputStream;
 }

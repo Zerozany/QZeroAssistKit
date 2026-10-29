@@ -107,12 +107,6 @@ void ClassesManager::onLocalClassesPathChanged()
     this->setClassesList(tmpVariantList);
 }
 
-ClassesManager* ClassesManager::create(QQmlEngine*, QJSEngine*)
-{
-    static ClassesManager* classManager{new ClassesManager{}};
-    return classManager;
-}
-
 QVariantList ClassesManager::classesList() const
 {
     return m_classesList;
