@@ -4,7 +4,6 @@ find_package(Qt6 REQUIRED
     Qml
     Core
     QuickControls2
-    Sql
 )
 
 qt_policy(SET QTP0005 NEW)
@@ -29,5 +28,4 @@ target_link_libraries(${PROJECT_NAME}
     Qt6::Quick
     Qt6::QuickControls2
     Qt6::Qml
-    Qt6::Sql
 )

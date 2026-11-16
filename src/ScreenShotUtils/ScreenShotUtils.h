@@ -3,18 +3,18 @@ _Pragma("once");
 #include <QtQml>
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
-    #ifdef QZeroAssistKit
-        #define QZERO_API Q_DECL_EXPORT
+    #ifdef QZEROASSISTKIT_BUILDING
+        #define ASSISTKIT_DLL Q_DECL_EXPORT
     #else
-        #define QZERO_API Q_DECL_IMPORT
+        #define ASSISTKIT_DLL Q_DECL_IMPORT
     #endif
 #elif defined(__GNUC__) || defined(__clang__)
-    #define QZERO_API __attribute__((visibility("default")))
+    #define ASSISTKIT_DLL __attribute__((visibility("default")))
 #else
-    #define QZERO_API
+    #define ASSISTKIT_DLL
 #endif
 
-class QZERO_API ScreenShotUtils : public QObject
+class ASSISTKIT_DLL ScreenShotUtils : public QObject
 {
     Q_OBJECT
     QML_SINGLETON

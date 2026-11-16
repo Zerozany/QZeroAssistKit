@@ -4,21 +4,21 @@ _Pragma("once");
 #include <QTranslator>
 
 #if defined(Q_OS_WINDOWS) && defined(_MSC_VER)
-    #ifdef QZeroAssistKit
-        #define QZERO_API Q_DECL_EXPORT
+    #ifdef QZEROASSISTKIT_BUILDING
+        #define ASSISTKIT_DLL Q_DECL_EXPORT
     #else
-        #define QZERO_API Q_DECL_IMPORT
+        #define ASSISTKIT_DLL Q_DECL_IMPORT
     #endif
 #elif defined(__GNUC__) || defined(__clang__)
-    #define QZERO_API __attribute__((visibility("default")))
+    #define ASSISTKIT_DLL __attribute__((visibility("default")))
 #else
-    #define QZERO_API
+    #define ASSISTKIT_DLL
 #endif
 
 class QJSEngine;
 class QQmlEngine;
 
-class QZERO_API Translator : public QTranslator
+class ASSISTKIT_DLL Translator : public QTranslator
 {
     Q_OBJECT
     QML_SINGLETON

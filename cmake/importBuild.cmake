@@ -5,23 +5,15 @@ target_compile_features(${PROJECT_NAME}
 
 target_compile_definitions(${PROJECT_NAME}
     PRIVATE
-    QZeroAssistKit
+    QZEROASSISTKIT_BUILDING="${PROJECT_NAME}"
 )
 
 if(MSVC)
     target_compile_options(${PROJECT_NAME}
         PRIVATE
         "$<$<CONFIG:Debug>:/Z7>"
-    )
-
-    target_compile_options(${PROJECT_NAME}
-        PRIVATE
         "/utf-8"
         "/FS"
-    )
-
-    target_compile_options(${PROJECT_NAME}
-        PRIVATE
         "$<$<CONFIG:Debug>:/Od>"
         "$<$<CONFIG:Release>:/Ox>"
     )
