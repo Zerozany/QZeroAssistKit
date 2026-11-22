@@ -28,7 +28,7 @@ class ASSISTKIT_DLL SoftwareManager : public QObject
 public:
     static auto instance() noexcept -> SoftwareManager*;
 
-    ~SoftwareManager() noexcept = default;
+    virtual ~SoftwareManager() noexcept = default;
 
     Q_DISABLE_COPY_MOVE(SoftwareManager)
 protected:

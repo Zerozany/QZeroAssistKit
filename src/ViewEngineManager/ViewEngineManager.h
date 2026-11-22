@@ -20,7 +20,7 @@ class ASSISTKIT_DLL ViewEngineManager : public QObject
 public:
     explicit(true) ViewEngineManager(QQmlApplicationEngine& _qmlApplicationEngine, QObject* _parent = nullptr);
 
-    ~ViewEngineManager() noexcept = default;
+    virtual ~ViewEngineManager() noexcept = default;
 
 protected:
     virtual auto connectSignal2Slot() noexcept -> void;
